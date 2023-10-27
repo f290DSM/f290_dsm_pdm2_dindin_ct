@@ -20,6 +20,7 @@ class CurrencyService {
   ];
 
   Future<String> getData() async {
+    Future.delayed(const Duration(seconds: 20));
     var response = await get(Uri.parse(hgBrasilFinanceUrl));
 
     if (response.statusCode == HttpStatus.ok) {
