@@ -1,3 +1,4 @@
+import 'package:f290_dsm_pdm2_dindin_ct/domain/currency_model.dart';
 import 'package:flutter/material.dart';
 
 import 'services/currency_service.dart';
@@ -59,6 +60,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  final currencyService = CurrencyService();
+
   @override
   void initState() {
     _fetchData();
@@ -67,8 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _fetchData() async {
     var service = CurrencyService();
-    var result = await service.getData();
-    print('DATA: \n$result');
+    List<CurrencyModel> currencies = await service.getCurrencies();
+    print(currencies);
   }
 
   void _incrementCounter() {
@@ -100,34 +103,37 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: FutureBuilder(
+        future: currencyService.getCurrencies(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.waiting) {
+            return Container(color: Colors.red);
+          }
+
+          //TODO: Validar erros da requisicao
+
+          // Paula, Paulo, Antonio, Joyce, Marius, Jonatan, Bruna, Gleison
+
+          List<CurrencyModel> currencies = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: currencies.length,
+            itemBuilder: (context, index) {
+              var currency = currencies[index];
+              return Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(currency.name!),
+                      subtitle: Text('${currency.sell}'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,

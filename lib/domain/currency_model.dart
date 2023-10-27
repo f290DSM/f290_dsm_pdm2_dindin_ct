@@ -34,4 +34,9 @@ class CurrencyModel {
 
   factory CurrencyModel.fromJson(String pJson) =>
       CurrencyModel.fromMap(json.jsonDecode(pJson));
+
+  @override
+  String toString() {
+    return 'CurrencyModel{name: $name, buy: $buy, sell: $sell, variation: $variation}';
+  }
 }
