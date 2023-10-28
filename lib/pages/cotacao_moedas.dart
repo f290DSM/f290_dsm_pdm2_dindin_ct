@@ -6,16 +6,16 @@ import 'package:loading_indicator/loading_indicator.dart';
 import '../domain/currency_model.dart';
 import '../services/currency_service.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class CotacaoMoedasPage extends StatefulWidget {
+  const CotacaoMoedasPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CotacaoMoedasPage> createState() => _CotacaoMoedasPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _CotacaoMoedasPageState extends State<CotacaoMoedasPage> {
   final currencyService = CurrencyService();
 
   @override
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }
 
           //TODO: Validar erros da requisicao
-          if (!snapshot.hasError) {
+          if (snapshot.hasError) {
             return const Center(
               child: SizedBox(
                 width: 200,
